@@ -1,23 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <nav>
+          <h1>
+            TodoList {"App "}
+            <span>
+              powered by{" "}
+              <img
+                src={require("./assets/img/solana.ico")}
+                width={10}
+                height={10}
+                alt="Solana"
+              />
+            </span>
+            <WalletMultiButton />
+          </h1>
+        </nav>
       </header>
     </div>
   );
