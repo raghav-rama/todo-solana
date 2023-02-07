@@ -28,7 +28,7 @@ describe("todo-solana", () => {
       .initialize()
       .accounts({
         todoItem: keypair.publicKey,
-        nextTodoAccount: nextKeyPair.publicKey,
+        current: nextKeyPair.publicKey,
         genesisTodoAccount: genesisKeyPair.publicKey,
         user: account,
         systemProgram: anchor.web3.SystemProgram.programId,
@@ -43,7 +43,7 @@ describe("todo-solana", () => {
 
     console.log("Account", _account);
 
-    const todoItem = await program.account.todoItem.fetch(keypair.publicKey);
+    let todoItem = await program.account.todoItem.fetch(keypair.publicKey);
 
     console.log("Todo Item", todoItem);
 
@@ -54,5 +54,24 @@ describe("todo-solana", () => {
     const currentTodoItem = await program.account.currentTodoItem.fetch(nextKeyPair.publicKey);
 
     console.log("Current Todo Item", currentTodoItem);
+  });
+
+  it("Adds a todo item", async () => {
+    let new_keypair: anchor.web3.Keypair = anchor.web3.Keypair.generate();
+    const tx = await program.methods
+      .addTodo("TODO: do math homework")
+      .accounts({
+        newTodoItem: new_keypair.publicKey,
+        current: nextKeyPair.publicKey,
+        previous: keypair.publicKey,
+      })
+      .signers([new_keypair, myKeyPair])
+      .rpc();
+      console.log("Your transaction signature", tx);
+      const head = await program.account.todoItem.fetch(keypair.publicKey);
+      console.log("Head", head);
+      const second = await program.account.todoItem.fetch(head.next);
+      console.log("Second", second);
+      
   });
 });
